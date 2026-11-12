@@ -131,6 +131,37 @@ void test_run() {
     }
 }
 
+void help() {
+    printf("constrained_sum: steepest gradient approach\n");
+    printf("\tfind the best choice of N positive integers that:\n");
+    printf("\t\tsUM TO S\n");
+    printf("\t\tmaximize the function:\n");
+    printf("\t\tab + bc + cd + de\n");
+    printf("\tby Paul H Alfille 2026 -- MIT Licence\n");
+    printf("\tSee https://github.com/alfille/constrained_sum\n");
+    printf("\n");
+    printf("steep_sum [options]\n");
+    printf("\n");
+    printf("Options\n");
+    printf("\t-n | --number 5\t-- number of terms\n");
+    printf("\t-s | --sum 63\t-- sum of terms\n");
+    printf("\t-p | --passes 10\t-- repeat solution (random start)\n");
+    printf("\t-c | --csv\t--Comma Separated Value output for spreadsheet\n",SIM_TYPE);
+    printf("\t-h\t--help\t\tthis help\n");
+    printf("\n");
+    exit(1);
+}
+
+struct option long_options[] =
+{
+    {"passes" ,   required_argument, 0, 'p'},
+    {"sum"    ,   required_argument, 0, 's'},
+	{"number" ,   required_argument, 0, 'n'},
+	{"csv"    ,   no_argument,       0, 'c'},
+    {"help"   ,   no_argument,       0, 'h'},
+    {0        ,   0          ,       0,   0}
+};
+
 void main( void ) {
     srand((unsigned int)time(NULL)); // seed random
     for ( int r = 0 ; r<R ; ++r ) {
