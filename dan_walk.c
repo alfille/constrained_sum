@@ -2,12 +2,15 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <time.h>
+#include <getopt.h>
 
 int N = 5 ; // number of values
 
-int S = 163 ; // Sum of values
+int S = 63 ; // Sum of values
 
 int R = 10 ; // number of random passes
+
+bool CSV = false ;
 
 struct test {
     int plus ;
@@ -87,8 +90,30 @@ void test_perturb( struct test * current, struct test * candidate ) {
     }
 }
 
-void test_run() {
+void test_run_all() {
     struct test * current = test_alloc(0,0) ;
+    if ( CSV ) {
+        for( int i = 0 ; i<N ; ++i ) {
+            printf("\"a%d\",",i);
+        }
+        printf("\"val\"\n");
+    }
+    
+    for ( r = 0 ; r < R ; ++r ) {
+        int passes = test_run( current ) ;
+        if ( CSV ) {
+            for( int i = 0 ; i<N ; ++i ) {
+                printf("%d,",current->a[i]);
+            }
+            printf("%d\n",current->val);
+        } else {
+            printf("Solution (%d passes)\n",passes);
+            test_show( current ) ;
+        }
+    }
+}
+
+int test_run( struct test * current ) {
     int NN = N * (N-1) ;
     struct test * trials[NN] ;
 
@@ -106,8 +131,6 @@ void test_run() {
     // set up initial random
     test_randomize( current ) ;
     test_value( current ) ;
-    //printf("Start") ;
-    //test_show( current ) ;
     
     // loop through passes
     int passes = 0 ; 
@@ -123,9 +146,11 @@ void test_run() {
             }
         }
         if ( best_index == -1 ) {
-            printf("Solution (%d passes)\n",passes);
-            test_show( current ) ;
-            return ;
+            // solved!
+            for ( int n=0 ; n<NN ; ++n ) {
+                test_free( trials(n) ;
+            }
+            return passes ;
         }
         test_copy( trials[best_index] , current ) ;
     }
@@ -146,7 +171,7 @@ void help() {
     printf("\t-n | --number 5\t-- number of terms\n");
     printf("\t-s | --sum 63\t-- sum of terms\n");
     printf("\t-p | --passes 10\t-- repeat solution (random start)\n");
-    printf("\t-c | --csv\t--Comma Separated Value output for spreadsheet\n",SIM_TYPE);
+    printf("\t-c | --csv\t--Comma Separated Value output for spreadsheet\n");
     printf("\t-h\t--help\t\tthis help\n");
     printf("\n");
     exit(1);
@@ -156,17 +181,36 @@ struct option long_options[] =
 {
     {"passes" ,   required_argument, 0, 'p'},
     {"sum"    ,   required_argument, 0, 's'},
-	{"number" ,   required_argument, 0, 'n'},
-	{"csv"    ,   no_argument,       0, 'c'},
+    {"number" ,   required_argument, 0, 'n'},
+    {"csv"    ,   no_argument,       0, 'c'},
     {"help"   ,   no_argument,       0, 'h'},
     {0        ,   0          ,       0,   0}
 };
 
-void main( void ) {
-    srand((unsigned int)time(NULL)); // seed random
-    for ( int r = 0 ; r<R ; ++r ) {
-        test_run() ;
+int main( int argc, char * argv[] ) {
+    int c ;
+    while ( (c=getopt_long( argc, argv, "p:s:n:ch", long_options, NULL ) ) >= 0 ) {
+        switch( c ) {
+            case 'p':
+                R = atoi(optarg) ;
+                break ;
+            case 's':
+                S = atoi(optarg) ;
+                break ;
+            case 'n':
+                N = atoi(optarg) ;
+                break ;
+            case 'c':
+                CSV = true ;
+                break ;
+            case 'h':
+                help() ;
+                break ;
+        }
     }
+    
+    srand((unsigned int)time(NULL)); // seed random
+    test_run_all() ;
 }
 
     
