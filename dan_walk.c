@@ -90,29 +90,6 @@ void test_perturb( struct test * current, struct test * candidate ) {
     }
 }
 
-void test_run_all() {
-    struct test * current = test_alloc(0,0) ;
-    if ( CSV ) {
-        for( int i = 0 ; i<N ; ++i ) {
-            printf("\"a%d\",",i);
-        }
-        printf("\"val\"\n");
-    }
-    
-    for ( r = 0 ; r < R ; ++r ) {
-        int passes = test_run( current ) ;
-        if ( CSV ) {
-            for( int i = 0 ; i<N ; ++i ) {
-                printf("%d,",current->a[i]);
-            }
-            printf("%d\n",current->val);
-        } else {
-            printf("Solution (%d passes)\n",passes);
-            test_show( current ) ;
-        }
-    }
-}
-
 int test_run( struct test * current ) {
     int NN = N * (N-1) ;
     struct test * trials[NN] ;
@@ -148,11 +125,34 @@ int test_run( struct test * current ) {
         if ( best_index == -1 ) {
             // solved!
             for ( int n=0 ; n<NN ; ++n ) {
-                test_free( trials(n) ;
+                test_free( trials[n] ) ;
             }
             return passes ;
         }
         test_copy( trials[best_index] , current ) ;
+    }
+}
+
+void test_run_all() {
+    struct test * current = test_alloc(0,0) ;
+    if ( CSV ) {
+        for( int i = 0 ; i<N ; ++i ) {
+            printf("\"a%d\",",i);
+        }
+        printf("\"val\"\n");
+    }
+    
+    for ( int r = 0 ; r < R ; ++r ) {
+        int passes = test_run( current ) ;
+        if ( CSV ) {
+            for( int i = 0 ; i<N ; ++i ) {
+                printf("%d,",current->a[i]);
+            }
+            printf("%d\n",current->val);
+        } else {
+            printf("Solution (%d passes)\n",passes);
+            test_show( current ) ;
+        }
     }
 }
 
