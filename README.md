@@ -1,4 +1,8 @@
-# potholder
+# constrained_sum
+
+solve a maximization problem with constraints:
+
+
 Potter's database. Web based, phone friendly, visual, and free!
 
 [Full documentation](https://alfille.github.io/potholder/index.html)
