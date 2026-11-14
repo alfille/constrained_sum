@@ -5,11 +5,11 @@ solve a maximization problem with constraints:
 
 ## Basic problem:
 
-![Basic](image/eq1.png)
+![Basic](images/eq1.png)
 
 Advanced:
 
-![Basic](image/eq2.png)
+![Basic](images/eq2.png)
 
 
 ## Screen Shots:
