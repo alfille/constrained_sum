@@ -3,9 +3,14 @@
 solve a maximization problem with constraints:
 
 
-Potter's database. Web based, phone friendly, visual, and free!
+## Basic problem:
 
-[Full documentation](https://alfille.github.io/potholder/index.html)
+![Basic](image/eq1.png)
+
+Advanced:
+
+![Basic](image/eq2.png)
+
 
 ## Screen Shots:
 
